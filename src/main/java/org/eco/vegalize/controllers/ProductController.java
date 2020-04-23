@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -33,5 +34,11 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria not found");
         }
         return ResponseEntity.status(201).body(obj);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> listAllProducts(){
+        List<Product> products = (List) productService.findAllProducts();
+        return ResponseEntity.status(200).body(products);
     }
 }
