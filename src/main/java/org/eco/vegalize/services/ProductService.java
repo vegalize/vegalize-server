@@ -2,6 +2,7 @@ package org.eco.vegalize.services;
 
 import org.eco.vegalize.models.Category;
 import org.eco.vegalize.models.Product;
+import org.eco.vegalize.models.User;
 import org.eco.vegalize.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -13,16 +14,24 @@ import java.util.Optional;
 public class ProductService {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private CategoryService categoryService;
 
+    public Optional<User> findProvider(int id){
+        Optional<User> provider = userService.findUserById(id);
+        return provider;
+    }
     public Product save(Product product) throws ChangeSetPersister.NotFoundException {
         Optional<Category> category = categoryService.findById(product.getCategory().getId());
         if (!category.isPresent()){
             throw new ChangeSetPersister.NotFoundException();
         }
+
         product.setCategory(category.get());
         Product obj = productRepository.save(product);
         return product;
