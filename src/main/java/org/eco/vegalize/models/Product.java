@@ -17,6 +17,8 @@ public class Product {
 
     @OneToOne
     private Category category;
+    @OneToOne
+    private User provider;
 
     public Product() {
     }
@@ -59,5 +61,13 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public User getProvider() {
+        return provider;
+    }
+
+    public void setProvider(User provider) {
+        this.provider = provider;
     }
 }
