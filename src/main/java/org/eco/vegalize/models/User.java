@@ -1,13 +1,19 @@
 package org.eco.vegalize.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.web.servlet.View;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
+@JsonIgnoreProperties(value = {"password"}, allowSetters = true)
 public class User {
 
     @Id
