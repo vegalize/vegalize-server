@@ -30,7 +30,7 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
         Optional<User> provider = productService.findProvider(providerId);
-        if(!provider.isPresent()){
+        if(provider.isEmpty()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provider not exist");
         }
         Product obj;
