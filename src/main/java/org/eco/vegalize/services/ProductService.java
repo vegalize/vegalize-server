@@ -27,4 +27,8 @@ public class ProductService {
         Product obj = productRepository.save(product);
         return product;
     }
+
+    public Iterable<Product> findAllProducts(){
+        return productRepository.findAll();
+    }
 }
