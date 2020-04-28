@@ -1,5 +1,7 @@
 package org.eco.vegalize.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,15 +12,17 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"category", "provider"})
     private List<Product> items;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User buyer;
 
-    @ManyToOne
-    private User provider;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<User> provider;
 
+    @Column(columnDefinition = "Decimal(10,2) default '0.00'")
     private double amout;
 
     public Purchase() {
@@ -56,11 +60,11 @@ public class Purchase {
         this.buyer = buyer;
     }
 
-    public User getProvider() {
+    public List<User> getProvider() {
         return provider;
     }
 
-    public void setProvider(User provider) {
+    public void setProvider(List<User> provider) {
         this.provider = provider;
     }
 }

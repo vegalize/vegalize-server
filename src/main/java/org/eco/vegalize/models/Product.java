@@ -17,6 +17,7 @@ public class Product {
 
     @OneToOne
     private Category category;
+
     @OneToOne
     private User provider;
 

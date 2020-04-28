@@ -4,16 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.web.servlet.View;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import java.util.List;
+
 @Entity
-@JsonIgnoreProperties(value = {"password"}, allowSetters = true)
+@JsonIgnoreProperties(value = {"password", "purchases"}, allowSetters = true)
 public class User {
 
     @Id
@@ -26,6 +25,9 @@ public class User {
     @Email
     @NotNull
     private String email;
+
+    @OneToMany
+    private List<Purchase> purchases;
 
     @NotNull
     private String password;
