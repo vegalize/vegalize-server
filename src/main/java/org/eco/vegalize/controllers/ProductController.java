@@ -27,6 +27,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping("/{productID}")
+    public ResponseEntity<Product> findByID(@PathVariable int productID){
+        Optional<Product> product = productService.findById(productID);
+        if (product.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product not found");
+        }
+        return ResponseEntity.status(200).body(product.get());
+    }
+
     @PostMapping("/{providerId}")
     public ResponseEntity<?> registerProduct(@Valid @RequestBody Product product, Errors errors, @PathVariable Integer providerId){
         if (errors.hasErrors()){
@@ -52,7 +61,7 @@ public class ProductController {
         List<Product> products = (List) productService.findAllProducts();
         return ResponseEntity.status(200).body(products);
     }
-    
+
     @PostMapping("/image/{productId}")
     public ResponseEntity<URI> uploadImage(
             @RequestParam(name = "file") MultipartFile multipartFile,
