@@ -10,9 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +42,7 @@ public class ProductController {
             product.setProvider(provider.get());
             obj = productService.save(product);
         } catch (ChangeSetPersister.NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category not found");
         }
         return ResponseEntity.status(201).body(obj);
     }
@@ -48,4 +52,17 @@ public class ProductController {
         List<Product> products = (List) productService.findAllProducts();
         return ResponseEntity.status(200).body(products);
     }
+    
+    @PostMapping("/image/{productId}")
+    public ResponseEntity<URI> uploadImage(
+            @RequestParam(name = "file") MultipartFile multipartFile,
+            @PathVariable int productId) throws IOException, URISyntaxException {
+        Optional<Product> product = productService.findById(productId);
+        if (product.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product not found");
+        }
+        URI uri = productService.savePictureProduct(multipartFile, product.get());
+        return ResponseEntity.ok().body(uri);
+    }
 }
+

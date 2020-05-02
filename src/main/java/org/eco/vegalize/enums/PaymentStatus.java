@@ -1,4 +1,5 @@
 package org.eco.vegalize.enums;
 
-public class PaymentStatus {
+public enum  PaymentStatus {
+
 }

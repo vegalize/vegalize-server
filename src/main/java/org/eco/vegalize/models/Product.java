@@ -1,7 +1,10 @@
 package org.eco.vegalize.models;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
+import java.net.URI;
 
 @Entity
 public class Product {
@@ -20,6 +23,8 @@ public class Product {
 
     @OneToOne
     private User provider;
+
+    private URI picture;
 
     public Product() {
     }
@@ -70,5 +75,13 @@ public class Product {
 
     public void setProvider(User provider) {
         this.provider = provider;
+    }
+
+    public URI getPicture() {
+        return picture;
+    }
+
+    public void setPicture(URI picture) {
+        this.picture = picture;
     }
 }
