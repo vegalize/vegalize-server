@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "USERS")
 @JsonIgnoreProperties(value = {"password", "purchases"}, allowSetters = true)
 public class User {
 
