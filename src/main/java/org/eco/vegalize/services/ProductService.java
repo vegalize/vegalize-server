@@ -5,10 +5,12 @@ import org.eco.vegalize.models.Product;
 import org.eco.vegalize.models.User;
 import org.eco.vegalize.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,6 +23,9 @@ public class ProductService {
     private UserService userService;
 
     @Autowired
+    private ImageService imageService;
+
+    @Autowired
     private S3Service s3Service;
 
     @Autowired
@@ -28,6 +33,9 @@ public class ProductService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Value("${img.prefix.client.profile}")
+    private String prefix;
 
     public Optional<User> findProvider(int id){
         Optional<User> provider = userService.findUserById(id);
@@ -53,7 +61,12 @@ public class ProductService {
     }
 
     public URI savePictureProduct(MultipartFile multipartFile, Product product) throws IOException, URISyntaxException {
-        URI uri = s3Service.uploadFile(multipartFile);
+
+        BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+        String filenName = prefix + product.getId() + product.getProvider().getId()+ ".jpg";
+
+        URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), filenName, "image");
+
         product.setPicture(uri);
         productRepository.save(product);
         return uri;
